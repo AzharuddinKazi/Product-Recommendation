@@ -22,17 +22,17 @@ eigenval = svd$d
 e_sqare_energy = (eigenval/sum(eigenval))*100
 cumsum(e_sqare_energy)
 
-### 17 dimenstions explain much variation
+### 17 dimensions explain much variation
 svd <- svd(prod_rate1,nu=17,nv=17)
 S <- diag(svd$d[1:17])
 svd$u %*% S %*% t(svd$v)
 
 ### test user rating
-Newuserratings = c(1,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+Newprodratings = c(1,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 b <-matrix(Newuserratings,byrow=T, ncol=19)
 S1 <- diag(1/svd$d[1:17])
 
-newuserrating = b %*% svd$v %*% S1 
+newprodrating = b %*% svd$v %*% S1 
 
 ### correlation
 
@@ -44,10 +44,10 @@ getCosine <- function(x,y)
 }
 
 ## user based recommendation
-distances = apply(svd$u,1,getCosine,newuserrating) 
-userid = which((distances==max(distances))==TRUE)
-similaruser = prod_rate1[userid,]
-Newuserratings
-zeroposofNewUser = which((Newuserratings==0)==TRUE)
-recom = which(similaruser ==max(similaruser[zeroposofNewUser]))
+distances = apply(svd$u,1,getCosine,newprodrating) 
+prodid = which((distances==max(distances))==TRUE)
+similarprod = prod_rate1[prodid,]
+Newprodratings
+zeroposofNewProd = which((Newprodratings==0)==TRUE)
+recom = which(similarprod ==max(similarprod[zeroposofNewProd]))
 recom
